@@ -1,0 +1,86 @@
+一：ｈｔｔｐｐｉｐｅｌｉｎｅ管道
+
+1. 一个http请求过来之后，我们的iis和website如何进行处理，然后到我们的“处理代码”中，这个一个整体流程。
+
+
+2.我们通过代码调试的方式来窥探一下这个管道流。
+
+
+二： 不管是mvc 还是 webform 都是基于asp.net这个框架。也就是说管道流都是差不多了。
+
+     mvc在管道流上做了一个截图【module方式】 webform是得益于iis的“处理程序映射”。
+
+
+三：为了方便理解，我们从ashx这个地方出手。
+
+   很多人在不用的mvc的时候，习惯用js+ashx。
+
+   也就说ashx 使用 System.Web.UI.SimpleHandlerFactory 这个handler工厂来进行处理的。
+
+
+四：httpmodule，httphandler
+
+    1. httpmodule 就是一个“管道流“的拦截器。
+
+       我们可以在module中对http请求进行监控，或者修改。
+
+    2. httphandler就是我们的处理程序。=> IHttpHandler   
+
+       System.Web.UI.SimpleHandlerFactory => 可以从名称中看到，就是一个Handler的工厂，由simpleHandlerFactory
+     					     来产生我们的处理handler。
+
+
+五：实战一下
+
+ProcessRequestNotification 
+
+
+=> 
+
+
+InitializeRequestContext(nativeRequestContext, flags, out wr, out httpContext); => 构造http上下文
+
+
+=>   applicationInstance = HttpApplicationFactory.GetApplicationInstance(context);  => httpApplication (Global.asac)
+
+
+=>      this.InitIntegratedModules();   初始化module
+
+
+=>      BuildSteps 构造完module之后，我们开始构造handler。 => ManagedPipelineHandler
+
+
+
+注意获取handler的类：
+
+MaterializeHandlerExecutionStep    => gethandler
+
+
+CallHandlerExecutionStep           => PR函数     handler.ProcessRequest(context);
+
+
+
+
+
+这个大家要探索一下代码就可以了。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
