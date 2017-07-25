@@ -1,0 +1,43 @@
+一：ViewResult
+
+这个是我们Result家族中最复杂的一个。。。。
+
+因为这个设计到了Razor模板。。。
+
+
+Code + Razor模板   => html 【output】
+
+
+二：Razor模板到底最后了什么。。。 
+
+
+万事万物皆为类【对象】。。。。也就说，Razor模板最后也会生成类。。。
+
+index.cshtml  => index_csthml.cs... 
+
+
+我们发现：其实我们的asax会生成一个dll。。。
+
+ViewStart.cshtml 也生成了一个dll
+
+Home下面的每个action都生成了一个类。 【dll】
+
+
+Shard 文件夹也生成一个dll，每个csthml变成一个类。。。
+
+
+我们发现，我们的cshtml会生成一个继承自 WebViewPage<object> 的类。
+
+
+三：源码分析
+
+1. View => 构造了一个 ViewResult的类。。。
+
+
+
+
+   page.ViewContext = viewContext;
+    
+   page.ViewData = viewContext.ViewData;
+
+
