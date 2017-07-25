@@ -1,0 +1,79 @@
+一：Route的讲解
+
+1. 路由模板匹配
+
+
+添加路由： MapRoute
+
+剔除的路由：IgnoreRoute
+
+
+2. 简单来看mapRoute 和IgnoreRoute的源码。
+
+
+
+RouteTable
+
+=>   Routes [RouteCollection]
+
+
+=>  Route 【就是我们定义的路由模板】 
+            
+    1. 构建： [MvcRouteHandler]
+
+       Route item = new Route(url, new MvcRouteHandler()) {
+                Defaults = CreateRouteValueDictionary(defaults),
+                Constraints = CreateRouteValueDictionary(constraints),
+                DataTokens = new RouteValueDictionary()
+               };
+
+    2. 加入到Collection中去
+       routes.Add(name, item);
+
+
+
+IgnoreRoute =>  
+
+  1. 构建： 【[StopRoutingHandler]】
+            IgnoreRouteInternal item = new IgnoreRouteInternal(url) {
+                Constraints = new RouteValueDictionary(constraints)
+            };
+  2.  加入到Collection中去 
+  
+  routes.Add(item);
+
+
+  1. 通过源码，我们发现,Ignore和Map都是构建Route，然后添加到RouteCollection中去。。。
+     
+     我们发现，唯一不一样地方在哪里？？？？
+
+               MapRoute，我们加入的Handler是 MVCRouteHanlder。。。
+
+	       IgnoreRoute  我们的Handler 是  StopRoutingHandler
+
+
+                
+http => foreach 去找Route，如果Route被匹配，同事还要判断该Route的handler是什么类型，如果是StopRoutingHandler的话，
+
+        我们直接跳出。
+
+	GetRouteData
+
+
+二：constraints约束 
+
+就是对你的url模板的参数进行限定，
+
+比如说： {controller}/{action}/{id}  模板。。。
+
+我可以对id进行限定，对action参数进行限定，，，，controller进行限定。。。
+
+
+1. 我想做到输入的url模板中，id只能是整数 。。。。
+
+
+   我们从源码中发现，connstraint中可以定义两种约束，第一种字符串，第二种自定义。
+
+2. 自定义约束：IRouteConstraint
+
+
