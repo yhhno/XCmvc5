@@ -1,0 +1,55 @@
+一：自定义httpmodule
+
+1.概念
+
+到现在为止，我们应该知道，httpmodule就是用来拦截我们的请求。
+
+通过事件注册的形式来拦截我们的请求。
+
+其实在httpapplication上面有很多的事件。
+
+
+BeginRequest。。。
+
+EndRequest。。。
+
+
+PostResolveRequestCache=> 被mvc注册了。。。
+
+
+2. 实战 【检测一下参数中是否有异常字符（防止sql注入）】
+
+《1》 要继承IHttpModule这个接口。
+
+《2》 在init方法中，我们要注册一下刚才看到的httpapplication事件。
+
+《3》 在webconfig中注册一下我们的module节点。
+
+
+3. module 就是通过 注册application事件的形式进行拦截：【因为mvc也是这么做】
+
+
+二：自定义HttpHandler
+
+我们在iis的“程序映射“中发现，每一个扩展名都有一个”类“来进行处理。
+
+
+ok，现在呢，我们可以自己定义一个扩展名，然后自己配置一个【处理类】
+
+
+三：图片
+
+图片防盗链。
+
+*.jpg  默认的静态文件，是被StaticFileModule,DefaultDocumentModule,DirectoryListingModule处理的。。。
+
+*.jpg  =>  自定义一个程序来处理
+
+
+1. 定义一个继承于 Ihttphandler的类。
+
+2. 配置webconfig中的httphandler节点。
+
+
+3. 测试：非盗链 和盗链 的情况展示。
+
