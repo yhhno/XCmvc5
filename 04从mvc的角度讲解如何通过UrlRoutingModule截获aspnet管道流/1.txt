@@ -1,0 +1,59 @@
+
+一：mvc的管道
+
+1. mvc中到底有没有module或者是handler。
+
+   非mvc中都是一个扩展名对应一个“handler”。
+
+
+xxxx.com/home/index/1   => 并没有扩展名，所以没有办法的解析。
+
+
+为了能够解析，mvc只能通过两种手段，第一种就是module，要么就是handler。。。
+
+
+2. Route: 定义路由模板。
+
+           //定义路由模板
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
+
+这个就是匹配的路由模板。
+
+
+3. 既然我们定义了路由模板，那么必定会被module截获。  => 
+
+=>   UrlRoutingModule
+
+
+=> application.PostResolveRequestCache += new EventHandler(this.OnApplicationPostResolveRequestCache);
+
+
+=>  RouteData routeData = this.RouteCollection.GetRouteData(context); 在routes中找到正确的路由。
+
+
+=>         public Route(string url, IRouteHandler routeHandler)
+        
+{
+            this.Url = url;
+            
+             this.RouteHandler = routeHandler;
+       
+ }
+
+
+=>   IRouteHandler routeHandler = routeData.RouteHandler;=>【mvcroutehandler】
+
+
+=> mvcRouteHandler => MvcHandler(requestContext)
+
+
+ protected internal virtual void ProcessRequest(HttpContextBase httpContext)
+
+
+最终我们可以看到。。。其实能mvc的架构是基于module的。
+
+
