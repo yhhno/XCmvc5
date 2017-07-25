@@ -1,0 +1,49 @@
+一：ActionResult    【public abstract void ExecuteResult(ControllerContext context);】
+
+1. 到底mvc中有多少个Result。。。
+
+
+二：非ViewResult的其他Result  
+
+
+二：介绍一些常用的Result
+
+1. JsonResult
+
+    默认情况下，json是禁止get访问。
+
+    这样的话，我们就可以通过ajax去访问这个 请求。
+
+
+研究源码：
+
+1. 构造jsonResult
+
+2. 通过JavaScriptSerializer来序列化我们的匿名类。
+
+
+
+2.JavaScriptResult
+
+
+研究源码：
+
+1. 构造JavascriptResult 对象
+
+
+2. 本质就是response.write。。。。
+
+
+3. ContentResult
+
+
+4. EmptyResult
+
+
+5. HttpNotFoundResult
+
+
+6. FileResult  下载文件，【验证码】
+
+   我们最终调用的是response的writeFile。
+
