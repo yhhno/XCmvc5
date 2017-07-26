@@ -1,0 +1,43 @@
+一：HtmlHelper
+
+1. 我们找一下常用的方法
+
+Html.BeginForm  =>   生成form表单。。。
+
+Html.TextBox
+
+
+二：Action 和 RenderAction 区别   =   Partial 和 RenderPartial区别
+
+《1》 一个有返回值： =》 将流变成了字符串的形式。
+
+     一个没有返回值。 =》相当于走了一遍管道流。
+
+都是叫做 “用户控件”。
+
+既然我可以通过 Html.Action的形式访问Login，那么我在url中是否可以直接访问？？？？
+
+用户控件最好不要被外界直接访问。。。  
+
+通过源码分析，我们发现“子action”的判断是通过 !filterContext.IsChildAction 属性来进行的。。。
+
+
+1. RenderPartialInternal
+
+2.       htmlHelper.RenderPartialInternal(partialViewName, viewData, model, writer, ViewEngines.Engines);
+                return MvcHtmlString.Create(writer.ToString());
+
+
+两组都是呈现分部视图。。
+
+前一组是和Action打了交道，后者则没有。。。
+
+两组视图其实后台逻辑本质都是一样的，调用FindPartialView来进行呈现，一个是呈现输出流，一个是呈现字符串。。。
+
+前一组适合加上自己的业务逻辑，后者则不适合。。。
+
+
+
+
+   
+

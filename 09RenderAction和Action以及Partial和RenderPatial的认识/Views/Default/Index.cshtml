@@ -1,0 +1,32 @@
+﻿@model _09RenderAction和Action以及Partial和RenderPatial的认识.Controllers.Student
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>login的标题Index</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.TextBox("username")
+    @Html.TextBoxFor(m=>m.name)
+}
+
+<br/>
+<br />
+<h1>Action+参数方式</h1>
+@Html.Action("LoginWithId", new { id = 10 })
+<br />
+<br />
+<h1>Action方式</h1>
+@Html.Action("Login")
+
+@{Html.RenderAction("Login");}
+<br />
+<br />
+
+<h2> Partial方式</h2>
+@Html.Partial("Login")
+
+@{
+    Html.RenderPartial("Login");
+}
