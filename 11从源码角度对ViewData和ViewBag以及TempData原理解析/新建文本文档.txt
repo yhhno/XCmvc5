@@ -1,0 +1,47 @@
+一：mvc中比较常用的三个集合。。。
+
+1. ViewData，ViewBag，TempData
+
+动态类型： 编译时不会检查，只有运行时才会检查，“运行时变量”。
+
+
+二：逐一讲解 【源码】
+
+1. ViewData
+
+   可以看到，其实ViewData就是一个ViewDataDictionary 类型的字典。 
+
+    page.ViewData = viewContext.ViewData;
+
+    ViewContext viewContext = new ViewContext(context, this.View, this.ViewData, this.TempData, output); 
+
+
+2. ViewBag
+
+   其实ViewBag和ViewData是一回事情，只是编程习惯不一样。。。
+
+
+3. TempData
+
+   可以存储一次，只能读取一次。。【如果第二次读取，将不会有tempdata数据】，这样就起到了临时变量
+   的作用
+
+   《1》 是一个string object的字典。
+   
+   《2》 action执行前后，都会对temp进行操作。。。
+
+
+this.PossiblyLoadTempData();
+
+
+ Action invoke
+
+
+ this.PossiblySaveTempData();
+
+
+也就是说，我们的tempData其实是用 System.Web.Mvc.SessionStateTempDataProvider 来实现的。 
+
+我们的tempdata 是 SessionStateTempDataProvider 这个类实现了。
+
+所以我们也可以自定义一个这样的DataProvider类。

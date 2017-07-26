@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+@ViewData["username"]
+<h1>    page.ViewData = viewContext.ViewData;</h1>
+<h1> ViewContext viewContext = new ViewContext(context, this.View, this.ViewData, this.TempData, output); </h1>
+<h1>在构造ViewContext时，已经把ViewData等在Controller中定义的变量赋值给它，让它转递给cshtml生成的类，也就是View</h1>
+
+@ViewContext.ViewData["username"]
+
+
+
+<br />
+<br />
+<br />
+<br />
+
+
+<h1>TempData</h1>
+
+@Html.ActionLink("TempDataSet", "TempDataSet", null, new { target = "_blank" })
+<br/>
+
+@Html.ActionLink("TempDataGetFirst", "TempDataGet", null, new { target="_blank"});
+<br />
+
+@Html.ActionLink("TempDataGetFirst", "TempDataGet", null, new { target = "_blank" });
