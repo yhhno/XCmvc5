@@ -1,0 +1,68 @@
+一：ValueProvider
+
+字典集合。。。
+
+ValueProviderFactoryCollection =》
+
+        static ValueProviderFactories()
+        {
+            ValueProviderFactoryCollection factorys = new ValueProviderFactoryCollection();
+            factorys.Add(new ChildActionValueProviderFactory());
+            factorys.Add(new FormValueProviderFactory());
+            factorys.Add(new JsonValueProviderFactory());
+            factorys.Add(new RouteDataValueProviderFactory());
+            factorys.Add(new QueryStringValueProviderFactory());
+            factorys.Add(new HttpFileCollectionValueProviderFactory());
+            _factories = factorys;
+        }
+
+ValueProvider 就是MVC中获取外界数据的一个大一统接口。。。
+
+
+二：在以前的webform
+
+querystring
+
+form
+
+files。。
+
+三：在mvc中获取外界数据的几种途径。
+
+1.  QueryStringValueProviderFactory
+
+2.  FormValueProviderFactory
+
+3.  HttpFileCollectionValueProviderFactory
+
+4.  JsonValueProviderFactory            => 将json的文本转化为实体。
+
+5.  RouteDataValueProviderFactory       => MvcRouteHandler ///  Route =》 GetRoute。。。。
+
+6.  ChildActionValueProviderFactory     => Html.Action /// Html.Partial
+
+
+四：针对这么多的获取数据方式，这个时候我们需要有一种统一的方式进行管理。 ValueProvider   =》 IValueProvider
+
+
+我们的ValueProvider是实现IValueprovider的接口，而这个接口实现了一个GetValue的方法。。。
+
+GetValue 返回的是 ValueProdiverResult类型，我们可以通过ConvertTo的方式，或者RawValue的方式。。。
+
+
+其实ValueProvider真的不是给我们用的，在源代码在的defalutModelbinder中大量的使用。。。 【模型绑定器】
+
+有了ValueProvider，我们才能使用复杂的类型绑定。。。。也就是Action的参数。。。
+
+
+
+
+
+
+    
+
+
+
+
+
+

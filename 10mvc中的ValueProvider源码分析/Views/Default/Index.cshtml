@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<h1>routedata</h1>
+@Html.ActionLink("Routedata", "ValueProviderWithRouteData", new { id=1})
+
+
+<br />
+
+<h1>QueryString</h1>
+<a href="Default\ValueProviderWithQueryString?id=2"/>
+
+<br />
+
+
+
+<h1>ChildAction</h1>
+
+@Html.Action("ValueProviderWithChildAction", new { id=3})
+<br />
+
+<h1>DefaultModelBinder</h1>
+
+<a href="Default\ModelBinder?name=jack" />
+
+
+
+
+
