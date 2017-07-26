@@ -1,0 +1,13 @@
+﻿@{
+    //万事万物皆为对象，既然是对象就可以添加些逻辑判断
+    if (new Random().Next(0,10)%2==0)
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+ 
+}
+<h1>我是ViewStart.cshtml</h1>

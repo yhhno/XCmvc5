@@ -1,0 +1,42 @@
+一：View的基本结构
+
+1. Shard文件夹：
+
+         《1》 master页： _layout.cshtml  这个模板页面， webform中的master。。。
+   
+         《2》 局部页面： _loginPartial.cshtml  。。。。 webfrom中的ascx。。。
+       
+         《3》 错误页面： Error页面。。。。              webfrom中的错误页面。
+
+
+razor  => aspx引擎
+
+
+2. _ViewStart
+ 
+   从名字中就可以看到，ViewStart页面应该是先于我们的view执行。
+
+《1》 有什么好处呢？？？？   
+    
+      统一设置。
+
+
+《2》 坏处？？？
+
+     如果在View的根目录下设置，会导致其他文件夹收到影响。
+
+
+3. viewstart 其实也是一个类文件，，，， 在windows temp 中。
+
+
+4. razor常见语言
+
+《1》 @{}
+
+《2》 @xxxx
+
+《3》 <text></text>
+ 
+
+5.Razor 是继承于 WebViewPage类。
+
