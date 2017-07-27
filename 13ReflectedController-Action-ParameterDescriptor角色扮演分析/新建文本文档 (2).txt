@@ -1,0 +1,43 @@
+一：ControllerDescriptor，ActionDescriptor，ParmaterDescriptor
+
+因为这三个descriptor在mvc的管道流以及激活Controller中扮演着非常重要的一个角色。。。
+
+这三个类用于对Controller，Action，Parmater这三个参数进行反射描述。。。
+
+
+Controller上面可能有“Atrribute”。。。   【Authrozie，HandlerError，Route】
+
+Action上面可能也有“Atrribute”。。。      【HttpPost，HttpGet。。。】
+
+Parmater 上面可能也有 “Atrribute”。。。。 【Bind】
+
+
+通过这三个类，能够获取到Controller，Action，Parameter上面的所有特性，然后根据这些特性来判断是否
+
+可以最终执行我们的Controller，Action，Paramter。。。。
+
+
+有人会说，mvc不难，只要大家能够掌握   管道流 。。。。
+
+
+【iis => urlroutingmodule => routinghandler => mvchandler => controllerfactory(controller) 
+
+=> actioninvoker(beginInvokeAction) =>  ControllerDescriptor[FindAction]【检查特性】 => Action【检查特性】 
+
+=> Parmeter【检查特性 DefaultModelBinder】 => 执行我们的Action  => actioninvoker(ExecuteResult) 】 
+
+
+二：通过源码调试加深理解。。。
+
+在mvc中，这三个类都有自己的实现类： ReflectedControllerDescriptor， ReflectedActionDescriptor， ReflectedParmaterDescriptor
+
+
+在mvc中，ControllerActionInvoke就是 actionInvoker的实现类。
+
+invoker = {System.Web.Mvc.Async.AsyncControllerActionInvoker}   =》 BeginInvokeAction
+
+
+
+
+
+
