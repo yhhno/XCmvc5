@@ -1,0 +1,73 @@
+
+一：DefaultModelBinder 
+
+mvc就是通过它来进行模型的绑定。。比如说将ValueProvider里面的数据映射成类。【复杂类型】，int/string 【简单类型】，array/list【集合类型】
+
+ValueProvider mvc 中获取外界数据的大一统。。。
+
+
+ValueProvider -----> DefaultModelBinder  ---------> 类/字符串/集合
+
+
+ControllerDescriptor，
+
+ActionDescriptor，   
+
+ParameterDescriptor。。。 【DefaultModelBinder】
+
+
+
+二：定义
+
+实现了IModelBinder接口。。。。
+
+这个接口之定义了一个方法： object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext);
+
+
+        protected virtual object GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
+        {
+            Type parameterType = parameterDescriptor.ParameterType;
+            IModelBinder modelBinder = this.GetModelBinder(parameterDescriptor);
+            IValueProvider valueProvider = controllerContext.Controller.ValueProvider;
+            string str = parameterDescriptor.BindingInfo.Prefix ?? parameterDescriptor.ParameterName;
+            Predicate<string> propertyFilter = GetPropertyFilter(parameterDescriptor);
+            ModelBindingContext bindingContext = new ModelBindingContext {
+                FallbackToEmptyPrefix = parameterDescriptor.BindingInfo.Prefix == null,
+                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(null, parameterType),
+                ModelName = str,
+                ModelState = controllerContext.Controller.ViewData.ModelState,
+                PropertyFilter = propertyFilter,
+                ValueProvider = valueProvider
+            };
+            return (modelBinder.BindModel(controllerContext, bindingContext) ?? parameterDescriptor.DefaultValue);
+        }
+
+
+三：绑定机制
+
+1. 简单类型：
+
+   直接从ValueProvider中获取。。。。
+
+   =>  BindSimpleModel
+
+
+2. 复杂类型：
+
+   Student =》【name，age，address（省，市，区）】
+
+   复杂类型是采用递归的模式，将一个复杂类型转换为一个个简单类型进行计算的。。。
+
+
+   => BindComplexModel   => 有几个属性绑定几个SimpleModel
+
+
+3. 集合 【前缀的方式】  732行的代码
+
+
+
+
+
+
+
+
