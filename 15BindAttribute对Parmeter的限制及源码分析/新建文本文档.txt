@@ -1,0 +1,61 @@
+BindAtrribute 和 自定义一下DefaultModelbinder。。。
+
+既然有这个，那么自然就有它的用处。。。
+
+
+BindAtrribute 现在我们将它应用到参数级别。。那么就是用来控制参数的。。。。
+
+
+BindAttribute ：
+
+1. include
+
+2. exclude
+
+3. prefix
+
+
+在ModelBinder的时候，都是有prefix的，如果不设置，那么默认以parmtermeter的参数名称为前缀。。。
+
+
+比如说  public ActionResult Index( Student stu)  默认是以stu开头的。。。
+
+stu.Name="xxx"
+
+stu.Age=20
+
+...
+
+s.Name="xxx"
+
+s.Age=20
+
+
+
+二：源码简要分析
+
+    ContrllerDescirptor =》 ActionDecriptor =》 ParameterDecriptor[student]
+
+
+    => PropertyDescriptor [id,name,age]
+
+       property = {System.ComponentModel.ReflectPropertyDescriptor}
+
+
+            public bool IsPropertyAllowed(string propertyName) => 
+            IsPropertyAllowed(propertyName, this._includeSplit, this._excludeSplit);
+
+
+            for (int i = 0; i < modelProperties.Count; i++)
+            {
+                PropertyDescriptor property = modelProperties[i];
+                if (ShouldUpdateProperty(property, propertyFilter))
+                {
+                    this.BindProperty(controllerContext, bindingContext, property);
+                }
+            }
+
+它就是我们的BindAtrribute的核心。。。
+
+
+

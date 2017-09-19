@@ -1,0 +1,19 @@
+﻿@model _15BindAttribute对Parmeter的限制及源码分析.Controllers.student;
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using(Html.BeginForm())
+{
+    @*@Html.TextBox("s.name",Model.name);
+    @Html.TextBox("s.id",Model.id);
+    @Html.TextBox("s.age",Model.age);*@
+
+    @Html.TextBoxFor(i=>i.id);
+    @Html.TextBoxFor(i=>i.name);
+    @Html.TextBoxFor(i=>i.age);
+    <input type="submit" value="提交" />
+}
+
