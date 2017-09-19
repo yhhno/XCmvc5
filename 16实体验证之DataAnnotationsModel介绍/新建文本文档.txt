@@ -1,0 +1,69 @@
+一：数据批注
+
+    DataAnnotationModel
+
+《1》 Required     必填
+
+《2》 StringLength 判断数据长度
+
+《3》 Compare      新密码和老密码的对比。
+
+《4》 RegularExpression  正则的匹配
+
+《5》 Phone              验证手机号码
+
+《6》 Range              验证范围
+
+《7》 MaxLength       数组或者string的最大长度 
+
+《8》 Remote          远程验证，jquery插件支持。
+
+二：实现方式
+
+
+1. 实现 ValidationAttribute 的一个特性。
+
+		public override bool IsValid(object value)
+		{
+			if (value == null)
+			{
+				return false;
+			}
+			string text = value as string;
+			return text == null || this.AllowEmptyStrings || text.Trim().Length != 0;
+		}
+
+这个就是判断是否验证通过的“业务逻辑”。
+
+
+三：这些特性的场景
+
+用于客户端 和 服务器端的验证机制。。。
+
+mvc将页面的业务逻辑全部用“特性”的形式加以标记。。。
+
+这样的话，灵活的控制。。。
+
+
+我们不倾向将 批注 用在客户端验证。。。 【有自己的验证框架】
+
+可以用“批注”做服务器验证。。。
+
+
+我们可以看到，我所列举的所有特性都是继承于 ValidationAttribute 类。。。
+
+
+我们发现一个缺陷，目前所验证的大多是基于“属性本身”，而不能做到“类的范围”
+
+
+《1》 我希望对属性的验证实现的是自定义的逻辑，而不是简单的一句话？？？
+
+《2》 我想对model中的几个值进行综合验证比较，而不是针对某一个值进行业务逻辑验证。。。
+
+
+封装的太多，限制就太多。。。 越方便就越没有灵活性。。。
+
+
+
+
+

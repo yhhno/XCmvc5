@@ -1,0 +1,15 @@
+﻿@model _16实体验证之DataAnnotationsModel介绍.Controllers.student
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm())
+{
+   
+    @Html.TextBoxFor(i =>i.age);
+    @Html.ValidationMessageFor(i => i.age);
+ 
+    <input type="submit" value="提交" />
+}
