@@ -1,0 +1,12 @@
+﻿@model _17自定义验证之ValidationAttribute及Model级验证IValidationObject.Controllers.student
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.BeginForm(){
+@Html.ValidationSummary();
+@Html.TextBoxFor(i => i.age);
+@Html.ValidationMessageFor(i => i.age);
+}
