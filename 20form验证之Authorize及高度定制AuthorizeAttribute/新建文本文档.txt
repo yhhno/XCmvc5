@@ -1,0 +1,48 @@
+一：Authorize特性。。。
+
+这个标记在webform中也是有的。。。。它并不是mvc专有的，也就是说是一个很古老的东西。。。
+
+    public class AuthorizeAttribute : FilterAttribute, IAuthorizationFilter
+    
+{
+}
+
+IActionFilter，IResultFilter。。。 包括我们现在说到的 AuthorizeAttribute
+
+
+    public interface IAuthorizationFilter
+    {
+        void OnAuthorization(AuthorizationContext filterContext);
+    }
+
+
+二：简单的实现一下
+
+    <authentication mode="Forms">
+      <forms loginUrl="/Home/Login"></forms>
+    </authentication>
+
+
+三：这个默认的表单验证太low了。。。 因为我们的web服务器是多台。。。
+
+    多台website。。。 怎么去共享cookie之，用户的身份信息。。。
+
+    也就是所谓的单点登录。
+
+
+
+    niginx =>  web1
+
+               web2		【redis，mongodb】
+
+	       web3
+
+sessionid，获取我们分配一个openid给client。。。
+
+
+
+
+
+
+
+
