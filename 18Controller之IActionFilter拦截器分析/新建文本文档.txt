@@ -1,0 +1,80 @@
+一：IActionFilter 过滤器
+
+其实，在mvc中，所有的action设计都是采用aop的方式进行拦截。。。
+
+需求：我想在action的执行前后进行参数拦截。。。【记日志】
+
+
+其实我们的Controller已经实现了ActionFilter。。。。
+
+    public abstract class Controller : ControllerBase, 
+                                       IActionFilter, IAuthenticationFilter, IAuthorizationFilter, IDisposable,
+                                       IExceptionFilter, IResultFilter, IAsyncController, IController, 
+                                       IAsyncManagerContainer
+
+二：IActionFilter的接口实现。
+
+
+    public interface IActionFilter
+    {
+        void OnActionExecuted(ActionExecutedContext filterContext);
+
+	----> ActionInvoke(xxxx)  <-----
+
+        void OnActionExecuting(ActionExecutingContext filterContext);
+    }
+
+
+三：实现方式
+
+1. 直接override的形式
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var contrllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+
+            var actionName = filterContext.ActionDescriptor.ActionName;
+
+            var parameter = filterContext.ActionDescriptor.GetParameters();
+
+            filterContext.HttpContext.Response.Write(contrllerName + "_" + actionName);
+
+            base.OnActionExecuting(filterContext);
+        }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+        }
+
+2. 既然Controller也是实现IActionFilter，那么我也可以自定义一个类来实现IActionFilter，那么这样的话，
+
+   我们的自定义类就是一个原子类，同时我们也可以加上一个Attrubute放到不同的Action中去，那么就可以了。。。
+
+    public class MyCustomAttribute : FilterAttribute, IActionFilter
+    {
+        public void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+
+        }
+
+        public void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            //1.如果result不为空，那么就return了。不执行递归。。。
+            filterContext.Result = new ViewResult()
+            {
+                ViewName = "Error"
+            };
+        }
+    }
+
+3. 如果你嫌弃在每一个action上面加特性的话嫌烦，这个时候我们可以进行全局的注入
+
+       FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+
+            filters.Add(new MyCustomAttribute());
+        }
