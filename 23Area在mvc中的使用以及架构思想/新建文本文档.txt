@@ -1,0 +1,98 @@
+
+一：Area【区域】
+
+1. 背景：我们一般的mvc项目越来越大的时候，这时候就讲究分层，隔离。。。
+
+
+酒店：一个团队   http://hotels.ctrip.com/
+
+旅游：一个团队   ...
+
+机票：一个团队  http://flights.ctrip.com/
+
+
+这样有很多的mvc项目。。。
+
+除了这种分项目的方法，我们还有一种方式，叫做Area。。。
+
+
+机票：offline  使用到了Area。。。
+
+
+Area 就是一个大项目中的独立小项目。。。
+
+Area => MVC。。。 这样的话，方便我们进行协同开发。。。
+
+
+二：演示一下
+
+Area： Hotels这个项目，Hotels有自己的独立mvc。
+
+       Flights这个项目，也有自己独立的mvc结构。。。
+
+
+       同时Hotels 和Flights 是独立不相干的。。。
+
+
+“Home”请求找到下列匹配的控制器:
+WebApplication2.Areas.Flights.Controllers.HomeController
+WebApplication2.Controllers.HomeController
+
+
+请通过调用带有 'namespaces' 参数的 "MapRoute" 方法的重载来注册此路由。
+
+这个话的意思就是在MapRoute的时候，限定命名空间。。。。
+
+
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                namespaces: new string[] { "WebApplication2.Controllers" }   //一定要告知，这个maproute是寻找哪一个命名空间下面的Controller
+            );
+	
+这个就是为了防止mvc项目扩大导致的混乱。。。
+
+
+mvc 就是一个表现层的框架。。。 
+
+也就是说我们真正的逻辑还是会在Bll里面。。Bussiness里面。。。
+
+
+其实我个人认为还是最好使用不同的项目。。。这样的话方便管理。。。
+
+
+
+三：大概的实现形式
+
+1.  AreaRegistration.RegisterAllAreas();  要实现这个。。。
+
+2. 每个area项目，都有一个注册类
+
+    public class FlightsAreaRegistration : AreaRegistration 
+    {
+        public override string AreaName 
+        {
+            get 
+            {
+                return "Flights";
+            }
+        }
+
+        public override void RegisterArea(AreaRegistrationContext context) 
+        {
+            context.MapRoute(
+                "Flights_default",
+                "Flights/{controller}/{action}/{id}",
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new string[] { "WebApplication2.Areas.Flights.Controllers" }
+            );
+        }
+    }
+
+
+
+就是为了解耦。
+
+
+
