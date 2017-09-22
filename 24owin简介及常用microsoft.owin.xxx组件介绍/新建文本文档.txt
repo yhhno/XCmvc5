@@ -1,0 +1,70 @@
+
+一：经常看到，但是我还没有讲解的一个东西。。。
+
+[assembly: OwinStartupAttribute(typeof(WebApplication3.Startup))]
+namespace WebApplication3
+{
+    public partial class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            ConfigureAuth(app);   //入口函数。
+        }
+    }
+}
+
+你看到的最多的一个单词，Owin。。。
+
+Owin是一个解耦的规范。。。
+
+
+web server  ->    owin   ->  web application
+
+
+owin 是 web服务器和 web应用程序的一个中间件。
+
+owin => .net 版本的实现，  katana。。。
+
+
+好处： iis 和 web程序解耦。。。
+
+
+一个非常好的应用就是 signalr => [实时通讯框架]
+
+
+一个开源项目。。。它呢不受我们的。netfromwork的影响。。。
+
+
+signlar的程序集都是通过 nuget这个工具包进行安装的。。。
+
+
+二：现实的一个例子
+
+
+Microsoft.Owin.Security.Cookies  就是owin的一个中间件。。
+
+将中间件作为一个插件介入到我们的web application。。。
+
+
+cookie验证中： 有一个就是form验证。。。这个是framewrok中自带的。。。
+
+owin的开源社区中，有人就提供了一个cookie的一个验证。。。
+
+
+启用owin的话，步骤如下：
+
+
+1. 新建StartUp。
+
+2. 注册一下我们下载一个功能中间件，比如说cookie的一个验证中间件，google的openid验证。。。
+
+
+三：亲自实践
+
+1. Microsoft.Owin.SelfHost   就是一个提供自托管的中间件。。。。
+
+
+我们用console来承载一个web。。。	 SignalR  就是基于 Owin的。。。
+
+
+katana是owin规范的一个实现。。
