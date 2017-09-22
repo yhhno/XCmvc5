@@ -1,0 +1,79 @@
+一：Bundle
+
+1. js的合并。。。 【将多个js文件合并成一个】
+
+2. js的压缩。。。 【将这个js文件压缩】
+
+
+最终我们就得到了一个单文件的压缩包。
+
+
+chrome里面会有并发的http请求限制。。。
+
+
+二：演示一下
+
+
+三：分析源码
+
+          BundleConfig.RegisterBundles(BundleTable.Bundles);  全局的静态变量
+
+bundles 是一个集合。。。
+
+里面有 
+
+scriptbundle  一捆
+                           => bundle
+cssbundle     一捆
+
+
+
+scriptbundle：
+
+
+    public ScriptBundle(string virtualPath, string cdnPath) : base(virtualPath, 
+                         cdnPath, new IBundleTransform[] { new JsMinify() })
+        {
+            base.ConcatenationToken = ";" + Environment.NewLine;
+        }
+
+父类Bundle 很重要的要给类。。。 为啥很重要呢?
+
+  string bundleContent = this.Builder.BuildBundleContent(this, context, files);
+
+  这个方法，貌似就是合并的方法。。。
+
+
+       public string ApplyTransforms()
+        {
+            string str;
+            using (StreamReader reader = new StreamReader(this.VirtualFile.Open()))
+            {
+                str = reader.ReadToEnd();
+            }
+            if ((this.Transforms != null) && (this.Transforms.Count > 0))
+            {
+                foreach (IItemTransform transform in this.Transforms)
+                {
+                    str = transform.Process(this.IncludedVirtualPath, str);
+                }
+            }
+            return str;
+        }
+
+合并文件的方式 ，，就是一次一次的通过StreamReader来读取内容。。。
+
+
+
+四：指定js压缩的两种方式。
+
+
+ BundleTable.EnableOptimizations = true;
+
+ <compilation debug="true" targetFramework="4.5" />
+
+
+  MTConfigUtil.GetCompilationConfig(context).Debug;
+
+
+
