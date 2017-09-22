@@ -1,0 +1,112 @@
+一：ActionMethodSelectorAttribute
+
+
+1. HttpPost，HttpGet， ActionName，NonAction。。。
+
+
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class HttpPostAttribute : ActionMethodSelectorAttribute
+    {
+        private static readonly AcceptVerbsAttribute _innerAttribute = new AcceptVerbsAttribute(HttpVerbs.Post);
+        
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo) => 
+            _innerAttribute.IsValidForRequest(controllerContext, methodInfo);
+    }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class HttpGetAttribute : ActionMethodSelectorAttribute
+    {
+        private static readonly AcceptVerbsAttribute _innerAttribute = new AcceptVerbsAttribute(HttpVerbs.Get);
+        
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo) => 
+            _innerAttribute.IsValidForRequest(controllerContext, methodInfo);
+    }
+
+二： ActionNameSelectorAttribute
+
+2. ActionName，NonAction
+
+    //Action的逻辑
+    public sealed class ActionNameAttribute : ActionNameSelectorAttribute
+    {
+        public ActionNameAttribute(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException(MvcResources.Common_NullOrEmpty, "name");
+            }
+            this.Name = name;
+        }
+        
+        public override bool IsValidName(ControllerContext controllerContext, string actionName, MethodInfo methodInfo) => 
+            string.Equals(actionName, this.Name, StringComparison.OrdinalIgnoreCase);
+        
+        public string Name { get; private set; }
+    }
+
+
+    public sealed class ActionNameAttribute : ActionNameSelectorAttribute
+
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class NonActionAttribute : ActionMethodSelectorAttribute
+    {
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo) => 
+            false;
+    }
+
+
+三：HttpGet的实现原理
+
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
+    public sealed class HttpGetAttribute : ActionMethodSelectorAttribute
+    {
+        private static readonly AcceptVerbsAttribute _innerAttribute = new AcceptVerbsAttribute(HttpVerbs.Get);
+        
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo) => 
+            _innerAttribute.IsValidForRequest(controllerContext, methodInfo);
+    }
+
+
+httpGet => AcceptVerb这个特性。
+
+
+        public override bool IsValidForRequest(ControllerContext controllerContext, MethodInfo methodInfo)
+        {
+            if (controllerContext == null)
+            {
+                throw new ArgumentNullException("controllerContext");
+            }
+            string httpMethodOverride = controllerContext.HttpContext.Request.GetHttpMethodOverride();
+            return this.Verbs.Contains<string>(httpMethodOverride, StringComparer.OrdinalIgnoreCase);
+        }
+
+
+RefelctedActionDescritor  => ActionDescriptor
+
+
+非常熟悉的代码：
+
+       ControllerDescriptor controllerDescriptor = this.GetControllerDescriptor(controllerContext);
+       ActionDescriptor actionDescriptor = this.FindAction(controllerContext, controllerDescriptor, actionName);
+
+  我们在通过FindAction寻找Action的时候，会一直判断这个Action是否可以成功闯关。。。
+
+
+
+四： 我们自己来实现一个ActionMethodSelectorAttribute
+
+    HttpGet 判断当前的请求方式是否和我塞入的一样，对吧。。。。
+
+
+    我现在不仅仅是判断Get，还要判断必须是Ajax提交。。。
+
+    Get => Get + Ajax    只有这样我才能让其通过。。。
+
+
+    Post => Post+Ajax    只有这样才能通过。。。
+
+    return BeginInvokeAction_ActionNotFound(callback, state);
+
